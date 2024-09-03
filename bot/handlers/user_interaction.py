@@ -28,9 +28,8 @@ async def send_weather_by_city(message: Message):
             )
         )
 
-    except Exception:
-        # TODO усовершеснтвовать для более понятного ответа + логирование.
-        await message.answer("Упс. Кажется, что-то пошло не так.")
+    except Exception as e:
+        await message.answer(f"{e}")
 
 
 @router.message(F.content_type == "location")
@@ -51,6 +50,5 @@ async def send_weather_by_location(message: Message):
             )
         )
 
-    except Exception:
-        # TODO усовершеснтвовать для более понятного ответа + логирование.
-        await message.answer("Упс. Кажется, что-то пошло не так.")
+    except Exception as e:
+        await message.answer(f"{e}")
