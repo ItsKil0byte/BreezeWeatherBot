@@ -21,7 +21,29 @@ async def send_weather_by_city(message: Message):
 
         await message.answer(
             WEATHER_ANSWER.format(
-                city=data["city"],
+                time=data["time"],
+                weather=data["weather"],
+                temp=data["temp"],
+                temp_like=data["temp_like"],
+            )
+        )
+
+    except Exception:
+        # TODO усовершеснтвовать для более понятного ответа + логирование.
+        await message.answer("Упс. Кажется, что-то пошло не так.")
+
+
+@router.message(F.content_type == "location")
+async def send_weather_by_location(message: Message):
+    try:
+        latitude = message.location.latitude
+        longtude = message.location.longitude
+
+        user_location = f"{latitude},{longtude}"
+        data = get_temp(user_location)
+
+        await message.answer(
+            WEATHER_ANSWER.format(
                 time=data["time"],
                 weather=data["weather"],
                 temp=data["temp"],

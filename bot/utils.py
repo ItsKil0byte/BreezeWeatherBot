@@ -12,16 +12,15 @@ async def set_commands(bot: Bot):
     await bot.set_my_commands(commands)
 
 
-def get_temp(city: str):
+def get_temp(query: str):
     key = config.api_key.get_secret_value()
-    url = f"http://api.weatherapi.com/v1/current.json?key={key}&q={city}&lang=ru"
+    url = f"http://api.weatherapi.com/v1/current.json?key={key}&q={query}&lang=ru"
 
     response = requests.get(url=url)
 
     if response.status_code == 200:
         data = response.json()
         return {
-            "city": data["location"]["name"],
             "time": data["location"]["localtime"],
             "weather": data["current"]["condition"]["text"],
             "temp": data["current"]["temp_c"],
