@@ -3,7 +3,7 @@ from aiogram.types import BotCommand
 import requests
 import logging
 from configurator import config
-from messages import ERROR_API, ERROR_INTERNAL, ERROR_NOT_FOUND, CONDITIONS
+from messages import ERROR_API, ERROR_INTERNAL, ERROR_NOT_FOUND, CONDITIONS, RECOMMENDATIONS
 
 
 async def set_commands(bot: Bot):
@@ -36,6 +36,12 @@ def get_temp(query: str):
             raise Exception(ERROR_API)
 
 
+def get_recommendation(temp: int):
+    for minimum, maximum, recommendation in RECOMMENDATIONS:
+        if minimum < temp < maximum:
+            return recommendation
+
+
 def generate_message(template: str, data: dict):
     # NOTE: заглушка для будущего 'возможного' функционала.
     message_data = {
@@ -47,6 +53,9 @@ def generate_message(template: str, data: dict):
         "temp_like": data["current"]["feelslike_c"],
     }
 
+    recomendation = get_recommendation(message_data["temp"])
     message = template.format(**message_data)
+
+    message += f"\n{recomendation}"
 
     return message
