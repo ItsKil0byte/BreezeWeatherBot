@@ -3,7 +3,7 @@ from aiogram.types import BotCommand
 import requests
 import logging
 from configurator import config
-from messages import ERROR_API, ERROR_INTERNAL, ERROR_NOT_FOUND
+from messages import ERROR_API, ERROR_INTERNAL, ERROR_NOT_FOUND, CONDITIONS
 
 
 async def set_commands(bot: Bot):
@@ -22,12 +22,7 @@ def get_temp(query: str):
     data = response.json()
 
     if "error" not in data:
-        return {
-            "time": data["location"]["localtime"],
-            "weather": data["current"]["condition"]["text"],
-            "temp": data["current"]["temp_c"],
-            "temp_like": data["current"]["feelslike_c"],
-        }
+        return data
     else:
         code = data["error"]["code"]
 
@@ -39,3 +34,19 @@ def get_temp(query: str):
         else:
             logging.error(f"API ERROR. CODE {code}.")
             raise Exception(ERROR_API)
+
+
+def generate_message(template: str, data: dict):
+    # NOTE: заглушка для будущего 'возможного' функционала.
+    message_data = {
+        "location": data["location"]["name"],
+        "time": data["location"]["localtime"],
+        "weather": data["current"]["condition"]["text"],
+        "icon": CONDITIONS[data["current"]["condition"]["code"]],
+        "temp": data["current"]["temp_c"],
+        "temp_like": data["current"]["feelslike_c"],
+    }
+
+    message = template.format(**message_data)
+
+    return message
