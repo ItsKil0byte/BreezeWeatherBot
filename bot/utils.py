@@ -8,7 +8,9 @@ from messages import ERROR_API, ERROR_INTERNAL, ERROR_NOT_FOUND, CONDITIONS, REC
 
 async def set_commands(bot: Bot):
     commands = [
-        BotCommand(command="start", description="Запустить / Перезапустить бота.")
+        BotCommand(command="start", description="Запуск бота и инструкция по началу работы 🚀"),
+        BotCommand(command="help", description="Узнай, как получить прогноз погоды и рекомендации 🌦"),
+        BotCommand(command="about", description="О боте и его разработчике 👨‍💻"),
     ]
 
     await bot.set_my_commands(commands)
@@ -56,6 +58,6 @@ def generate_message(template: str, data: dict):
     recomendation = get_recommendation(message_data["temp"])
     message = template.format(**message_data)
 
-    message += f"\n{recomendation}"
+    message += f"\n<i>{recomendation}</i>"
 
     return message
